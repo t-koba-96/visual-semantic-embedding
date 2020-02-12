@@ -8,10 +8,14 @@ $ python -m spacy download en
 ```
 
 ### Pip users
-`pip install -r requirements.txt`
+```bash
+$ pip install -r requirements.txt
+```
 
 ### Dataset
-Run `download_coco.sh`
+```bash
+$ download_coco.sh
+```
 
 
 ## Training
