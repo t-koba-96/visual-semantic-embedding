@@ -1,0 +1,44 @@
+
+# path
+root_path: /home/ubuntu/local/dataset/mscoco
+
+
+#model
+cnn_type: resnet101 # image
+rnn_type: GRU # caption 
+
+
+#　train config  
+n_cpu: 8
+method: max # loss (max = hard negative , sum = all negative) 
+margin: 0.2 # loss margin
+intra: 0.5 # loss (beta)
+imp_weight: 1e-2 #loss weight
+freeze_epoch: 30 # where to unfreeze cnn params
+emb_size: 300 # embedding size of vocab
+out_size: 1024 # vector size both image,caption
+max_epochs: 30 # train epoch
+max_len: 30 # max length of sentence
+log_every: 10 # training log
+
+
+# hyperparams
+imsize_pre: 256 # img crop size
+imsize: 224 # img input size
+batch_size: 128
+lr_cnn: 2e-4 
+lr_rnn: 2e-4
+momentum: 0.9 #SGD
+alpha: 0.99 #RMSprop
+beta1: 0.9 #Adam
+beta2: 0.999 #Adam
+optimizer: Adam # SGD , Adam , RMSprop
+scheduler: Step # Plateau , Step
+patience: 30 # scheluder
+weight_decay: 0
+grad_clip: 2 # gradient norm clipping
+dampen_factor: 0.1
+es_cnt: 10 #early stopping threshold epoch
+
+
+  

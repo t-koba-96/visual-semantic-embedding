@@ -1,0 +1,6 @@
+__pycache__
+models/
+logs/
+out/
+.ipynb_checkpoints
+*.ipynb
