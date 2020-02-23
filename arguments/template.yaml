@@ -2,6 +2,8 @@
 # path
 root_path: /home/ubuntu/local/dataset/mscoco
 
+# checkpoint
+checkpoint: models/template/epoch_0029_score_394.ckpt
 
 #model
 cnn_type: resnet101 # image

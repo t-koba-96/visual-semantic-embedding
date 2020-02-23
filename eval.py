@@ -38,7 +38,7 @@ def get_arguments():
     parser.add_argument('--device', type=list, default=[1], help='choose device')
 
     # retrieval config
-    parser.add_argument('--checkpoint', type=str, required=True, help='Path to checkpoint, will load model from there')
+    #parser.add_argument('--checkpoint', type=str, required=True, help='Path to checkpoint, will load model from there')
     parser.add_argument('--image_path', type=str, default='demo/sample1.jpg')
     parser.add_argument('--output_dir', type=str, default='demo')
     parser.add_argument('--caption', type=str, default='the cat is walking on the street')
@@ -167,9 +167,9 @@ def main():
     imenc = imenc.to(device)
     capenc = capenc.to(device)
 
-    assert args.checkpoint is not None
-    print("loading model and optimizer checkpoint from {} ...".format(args.checkpoint), flush=True)
-    ckpt = torch.load(args.checkpoint)
+    assert SETTING.checkpoint is not None
+    print("loading model and optimizer checkpoint from {} ...".format(SETTING.checkpoint), flush=True)
+    ckpt = torch.load(SETTING.checkpoint)
     imenc.load_state_dict(ckpt["encoder_state"])
     capenc.load_state_dict(ckpt["decoder_state"])
 

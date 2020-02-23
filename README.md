@@ -23,6 +23,9 @@ $ download_coco.sh
 $ python train.py --root_path $ROOTPATH
 ```
 
+## Trained model  
+Download the trained model from [link](https://drive.google.com/drive/u/1/folders/19FgmEiWzEPTs-L6hsGzZssRzR952Mddt) to just try eval.py. Make sure to change the checkpoint arguments to the downloaded model path. 
+
 
 ## Evaluation, Visualization
 ```bash
