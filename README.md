@@ -26,7 +26,7 @@ $ python train.py --root_path $ROOTPATH
 
 ## Evaluation, Visualization
 ```bash
-$ python eval.py --root_path $ROOTPATH --checkpoint hogehoge.ckpt --image_path $IMAGE --caption $CAPTION
+$ python eval.py --root_path $ROOTPATH --checkpoint *.ckpt --image_path $IMAGE --caption $CAPTION
 ```
 
 [References](https://github.com/skasai5296/VSE)

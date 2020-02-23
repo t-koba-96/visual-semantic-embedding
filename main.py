@@ -299,7 +299,11 @@ def main():
 
         # unfreeze cnn parameters
         if epoch == SETTING.freeze_epoch:
-            optimizer.add_param_group({'params': imenc.module.cnn.parameters(), 'lr': float(SETTING.lr_cnn)})
+            if args.dataparallel:
+                optimizer.add_param_group({'params': imenc.module.cnn.parameters(), 'lr': float(SETTING.lr_cnn)})
+            else:
+                optimizer.add_param_group({'params': imenc.cnn.parameters(), 'lr': float(SETTING.lr_cnn)})
+
 
         #train(1epoch)
         train(epoch, train_loader, imenc, capenc, optimizer, lossfunc, vocab, args, SETTING)

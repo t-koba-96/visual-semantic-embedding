@@ -1,7 +1,10 @@
 import argparse
 import time
 
+import os
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from PIL import Image
 import torch
@@ -22,6 +25,9 @@ from vocab import Vocabulary
 def get_arguments():
     parser = argparse.ArgumentParser()
 
+    # Setting file
+    parser.add_argument('arg', type=str, help='arguments file name')
+
     # configurations of dataset (paths)
     parser.add_argument('--dataset', type=str, default='coco')
     parser.add_argument('--vocab_path', type=str, default='captions_train2017.txt')
@@ -33,7 +39,8 @@ def get_arguments():
 
     # retrieval config
     parser.add_argument('--checkpoint', type=str, required=True, help='Path to checkpoint, will load model from there')
-    parser.add_argument('--image_path', type=str, default='samples/sample1.jpg')
+    parser.add_argument('--image_path', type=str, default='demo/sample1.jpg')
+    parser.add_argument('--output_dir', type=str, default='demo')
     parser.add_argument('--caption', type=str, default='the cat is walking on the street')
 
     args = parser.parse_args()
@@ -50,6 +57,7 @@ def retrieve_i2c(dset, v_dset, impath, imenc, transform, k=1):
     plt.axis('off')
     plt.show(block=False)
     plt.show()
+
     im = transform(im).unsqueeze(0)
     begin = time.time()
     with torch.no_grad():
@@ -79,7 +87,7 @@ def retrieve_i2c(dset, v_dset, impath, imenc, transform, k=1):
     print("-"*50)
 
 
-def retrieve_c2i(dset, v_dset, caption, capenc, vocab, k=1):
+def retrieve_c2i(dset, v_dset, savedir, caption, capenc, vocab, k=1):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     begin = time.time()
     print("-"*50)
@@ -122,9 +130,12 @@ def retrieve_c2i(dset, v_dset, caption, capenc, vocab, k=1):
             axs[i].axis('off')
     else:
         raise
-    plt.show(block=False)
+    #plt.show(block=False)
+    #plt.show()
+    if not os.path.exists(savedir):
+         os.makedirs(savedir)
+    plt.savefig(os.path.join(savedir, "output.png"))
     print("-"*50)
-    plt.show()
 
 
 def main():
@@ -142,7 +153,7 @@ def main():
                              std=[0.229, 0.224, 0.225])
         ])
     if args.dataset == 'coco':
-        val_dset = CocoDataset(root=SETTING.root_path, imgdir='val2017', jsonfile='annotations/captions_val2017.json', transform=transform, mode='all')
+        val_dset = CocoDset(root=SETTING.root_path, img_dir='val2017', ann_dir='annotations/captions_val2017.json', transform=transform)
     val_loader = DataLoader(val_dset, batch_size=SETTING.batch_size, shuffle=False, num_workers=SETTING.n_cpu, collate_fn=collater)
 
     vocab = Vocabulary(max_len=SETTING.max_len)
@@ -163,11 +174,11 @@ def main():
     capenc.load_state_dict(ckpt["decoder_state"])
 
     begin = time.time()
-    dset = EmbedDataset(val_loader, imenc, capenc, vocab, args)
+    dset = EmbedDset(val_loader, imenc, capenc, vocab, args)
     print("database created | {} ".format(sec2str(time.time()-begin)), flush=True)
 
     retrieve_i2c(dset, val_dset, args.image_path, imenc, transform)
-    retrieve_c2i(dset, val_dset, args.caption, capenc, vocab)
+    retrieve_c2i(dset, val_dset, args.output_dir, args.caption, capenc, vocab)
 
 
 
